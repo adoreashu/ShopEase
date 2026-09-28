@@ -1,0 +1,4 @@
+Test Case ID,Module,Scenario,Preconditions,Steps,Expected Result,Priority,Status
+TC-001,Auth,Login with valid creds,User registered,1. Go to login
+2. Enter email/pass
+3. Click Login,User logged in successfully,High,Pass

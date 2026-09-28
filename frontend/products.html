@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Products</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<body>
+    <div class="container mt-5">
+        <h2>Products</h2>
+        <input type="text" id="search" class="form-control mb-3" placeholder="Search products...">
+        <div id="productList" class="row"></div>
+    </div>
+    <script src="js/api.js"></script>
+    <script>
+        async function loadProducts(q = '') {
+            const url = q ? '/products/search?q=' + q : '/products';
+            const products = await apiCall(url);
+            const list = document.getElementById('productList');
+            list.innerHTML = '';
+            products.forEach(p => {
+                list.innerHTML += 
+                <div class="col-md-4 mb-4">
+                    <div class="card" data-testid="product-card">
+                        <div class="card-body">
+                            <h5 class="card-title">+p.name+</h5>
+                            <p class="card-text">$+p.price+</p>
+                            <button onclick="addToCart(+p.id+)" class="btn btn-success" data-testid="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>;
+            });
+        }
+        async function addToCart(pid) {
+            try {
+                await apiCall('/cart/items', 'POST', { productId: pid, quantity: 1 });
+                alert('Added to cart');
+            } catch (err) { alert('Please login first'); window.location.href='login.html'; }
+        }
+        document.getElementById('search').addEventListener('input', (e) => loadProducts(e.target.value));
+        loadProducts();
+    </script>
+</body>
+</html>

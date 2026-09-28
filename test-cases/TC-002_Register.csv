@@ -1,0 +1,4 @@
+Test Case ID,Module,Scenario,Preconditions,Steps,Expected Result,Priority,Status
+TC-002,Auth,Register new user,None,1. Go to register
+2. Enter details
+3. Click Register,User registered,High,Pass
