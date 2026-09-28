@@ -33,8 +33,8 @@ ShopEase is a realistic, fully functional e-commerce web application designed as
    *Open your browser and navigate to http://localhost:3000*
 
 ## Test Credentials
-- **Email**: `john.doe@example.com`
-- **Password**: `Password@123`
+- **Email**: `shahil.pratap@example.com`
+- **Password**: `Password@123##`
 
 ## How to Run Automation Tests
 
