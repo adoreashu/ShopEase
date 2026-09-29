@@ -6,7 +6,7 @@ import java.sql.*;
 public class DbTest {
     @Test
     public void testDatabaseConnectionAndUsers() throws Exception {
-        Connection conn = DriverManager.getConnection("jdbc:h2:mem:shopease;MODE=MySQL", "sa", "password");
+        Connection conn = DriverManager.getConnection("jdbc:h2:file:../backend/data/shopease;MODE=MySQL;AUTO_SERVER=TRUE", "sa", "password");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT count(*) FROM users");
         rs.next();
