@@ -32,6 +32,24 @@ public class BackendApplication {
                 Product p5 = new Product(); p5.setName("Mechanical Gaming Keyboard"); p5.setDescription("RGB backlit keyboard with tactile mechanical switches"); p5.setPrice(89.99); p5.setDiscount(10.00); p5.setStock(80); p5.setCategory(c); p5.setAvailable(true); prodRepo.save(p5);
                 Product p6 = new Product(); p6.setName("4K Ultra HD 27\" Monitor"); p6.setDescription("IPS display with 144Hz refresh rate and HDR400"); p6.setPrice(349.99); p6.setDiscount(12.00); p6.setStock(30); p6.setCategory(c); p6.setAvailable(true); prodRepo.save(p6);
             }
+
+            prodRepo.findAll().forEach(item -> {
+                String n = item.getName() != null ? item.getName().toLowerCase() : "";
+                if(n.contains("headphone")) {
+                    item.setImageUrl("https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80");
+                } else if(n.contains("smartphone") || n.contains("phone")) {
+                    item.setImageUrl("https://images.unsplash.com/photo-1511707171634-5f897ff02560?w=600&auto=format&fit=crop&q=80");
+                } else if(n.contains("laptop")) {
+                    item.setImageUrl("https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&auto=format&fit=crop&q=80");
+                } else if(n.contains("watch")) {
+                    item.setImageUrl("https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80");
+                } else if(n.contains("keyboard")) {
+                    item.setImageUrl("https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600&auto=format&fit=crop&q=80");
+                } else if(n.contains("monitor")) {
+                    item.setImageUrl("https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600&auto=format&fit=crop&q=80");
+                }
+                prodRepo.save(item);
+            });
         };
     }
 }
