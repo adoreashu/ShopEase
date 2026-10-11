@@ -1,38 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Products</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">ShopEase</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="products.html">Products</a></li>
+                </ul>
+                <ul class="navbar-nav" id="auth-nav">
+                    <li class="nav-item"><a class="nav-link" href="login.html" data-testid="nav-login">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="register.html" data-testid="nav-register">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cart.html" data-testid="nav-cart">Cart (<span id="cart-count">0</span>)</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container mt-5">
-        <h2>Products</h2>
-        <input type="text" id="search" class="form-control mb-3" placeholder="Search products...">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Products</h2>
+            <div style="max-width: 320px; width: 100%;">
+                <input type="text" id="search" class="form-control" placeholder="Search products...">
+            </div>
+        </div>
         <div id="productList" class="row"></div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
     <script>
         async function loadProducts(q = '') {
-            const url = q ? '/products/search?q=' + q : '/products';
-            const products = await apiCall(url);
-            const list = document.getElementById('productList');
-            list.innerHTML = '';
-            products.forEach(p => {
-                list.innerHTML += 
-                <div class="col-md-4 mb-4">
-                    <div class="card" data-testid="product-card">
-                        <div class="card-body">
-                            <h5 class="card-title">+p.name+</h5>
-                            <p class="card-text">$+p.price+</p>
-                            <button onclick="addToCart(+p.id+)" class="btn btn-success" data-testid="add-to-cart">Add to Cart</button>
+            try {
+                const url = q ? '/products/search?q=' + encodeURIComponent(q) : '/products';
+                const products = await apiCall(url);
+                const list = document.getElementById('productList');
+                list.innerHTML = '';
+                if (!products || products.length === 0) {
+                    list.innerHTML = '<div class="col-12"><p class="text-muted">No products found.</p></div>';
+                    return;
+                }
+                products.forEach(p => {
+                    list.innerHTML += `
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm" data-testid="product-card">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${p.name}</h5>
+                                <p class="card-text text-muted flex-grow-1">${p.description || ''}</p>
+                                <p class="card-text fw-bold text-primary fs-5">$${Number(p.price).toFixed(2)}</p>
+                                <button onclick="addToCart(${p.id})" class="btn btn-success" data-testid="add-to-cart">Add to Cart</button>
+                            </div>
                         </div>
-                    </div>
-                </div>;
-            });
+                    </div>`;
+                });
+            } catch (err) {
+                console.error('Error loading products:', err);
+                document.getElementById('productList').innerHTML = '<div class="col-12"><div class="alert alert-danger">Failed to load products from server. Make sure backend is running.</div></div>';
+            }
         }
+
         async function addToCart(pid) {
             try {
                 await apiCall('/cart/items', 'POST', { productId: pid, quantity: 1 });
-                alert('Added to cart');
-            } catch (err) { alert('Please login first'); window.location.href='login.html'; }
+                alert('Added to cart!');
+            } catch (err) {
+                alert('Please login first');
+                window.location.href = 'login.html';
+            }
         }
+
         document.getElementById('search').addEventListener('input', (e) => loadProducts(e.target.value));
         loadProducts();
     </script>

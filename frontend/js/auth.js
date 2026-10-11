@@ -7,16 +7,16 @@ function updateAuthNav() {
     if (!authNav) return;
     const token = localStorage.getItem('token');
     if (token) {
-        authNav.innerHTML = 
+        authNav.innerHTML = `
             <li class="nav-item"><a class="nav-link" href="cart.html" data-testid="nav-cart">Cart (<span id="cart-count">0</span>)</a></li>
             <li class="nav-item"><a class="nav-link" href="order-history.html" data-testid="nav-orders">Orders</a></li>
             <li class="nav-item"><a class="nav-link" href="#" onclick="logout()" data-testid="nav-logout">Logout</a></li>
-        ;
+        `;
     } else {
-        authNav.innerHTML = 
+        authNav.innerHTML = `
             <li class="nav-item"><a class="nav-link" href="login.html" data-testid="nav-login">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="register.html" data-testid="nav-register">Register</a></li>
-        ;
+        `;
     }
 }
 
